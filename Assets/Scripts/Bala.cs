@@ -24,6 +24,11 @@ public class Bala : MonoBehaviour
             e.x *= -1;
             transform.localScale = e;
         }
+
+        VidasJugador victima = otro.GetComponent<VidasJugador>();
+        if (victima != null)
+            victima.ultimoAtacante = duenio.GetComponent<VidasJugador>();
+
         Destroy(gameObject, tiempoVida);
     }
 

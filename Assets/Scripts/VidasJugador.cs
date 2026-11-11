@@ -1,9 +1,16 @@
 using UnityEngine;
+using TMPro;
 
 public class VidasJugador : MonoBehaviour
 {
+    public string nombreMostrado = "Jugador 1";
+    public bool esHumano = true;
     public int vidas = 3;
     public Transform puntoReaparicion;
+    public TextMeshProUGUI textoHUD;
+
+    [HideInInspector] public int puntos;
+    [HideInInspector] public VidasJugador ultimoAtacante;
 
     Rigidbody2D rb;
     JugadorMovimiento movimiento;
@@ -14,15 +21,30 @@ public class VidasJugador : MonoBehaviour
         movimiento = GetComponent<JugadorMovimiento>();
     }
 
+    void Start()
+    {
+        ActualizarHUD();
+    }
+
     public void Morir()
     {
+        if (ultimoAtacante != null && ultimoAtacante != this)
+            ultimoAtacante.SumarPuntos(100);
+        ultimoAtacante = null;
+
         vidas--;
-        Debug.Log(name + " ha caído. Vidas restantes: " + vidas);
+        ActualizarHUD();
 
         if (vidas > 0)
             Reaparecer();
         else
             Eliminar();
+    }
+
+    public void SumarPuntos(int cantidad)
+    {
+        puntos += cantidad;
+        ActualizarHUD();
     }
 
     void Reaparecer()
@@ -35,7 +57,13 @@ public class VidasJugador : MonoBehaviour
 
     void Eliminar()
     {
-        Debug.Log(name + " ha sido eliminado");
         gameObject.SetActive(false);
+        GameManager.instancia.ComprobarFinPartida();
+    }
+
+    void ActualizarHUD()
+    {
+        if (textoHUD != null)
+            textoHUD.text = nombreMostrado + "\nVidas: " + vidas + "\nPuntos: " + puntos;
     }
 }
