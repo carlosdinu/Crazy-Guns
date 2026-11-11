@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
@@ -7,6 +8,7 @@ public class JugadorMovimiento : MonoBehaviour
     public KeyCode tclIzq = KeyCode.A;
     public KeyCode tclDer = KeyCode.D;
     public KeyCode tclSalto = KeyCode.W;
+    public KeyCode tclBajar = KeyCode.S;
 
     public float velocidad = 7f;
     public float fuerzaSalto = 12f;
@@ -39,6 +41,8 @@ public class JugadorMovimiento : MonoBehaviour
         if (Input.GetKey(tclIzq)) direccion -= 1f;
         if (Input.GetKey(tclDer)) direccion += 1f;
         if (Input.GetKeyDown(tclSalto)) quiereSaltar = true;
+        if (Input.GetKeyDown(tclBajar) && enSuelo)
+            IntentarBajar();
 
         if ((direccion > 0 && !mirandoDerecha) || (direccion < 0 && mirandoDerecha))
             Girar();
@@ -97,5 +101,22 @@ public class JugadorMovimiento : MonoBehaviour
     public void ReiniciarEmpuje()
     {
         empujeX = 0f;
+    }
+
+    void IntentarBajar()
+    {
+        Bounds b = col.bounds;
+        Collider2D debajo = Physics2D.OverlapBox(
+            new Vector2(b.center.x, b.min.y), new Vector2(b.size.x * 0.9f, 0.1f), 0f, capaSuelo);
+
+        if (debajo != null && debajo.GetComponent<PlatformEffector2D>() != null)
+            StartCoroutine(AtravesarPlataforma(debajo));
+    }
+
+    IEnumerator AtravesarPlataforma(Collider2D plataforma)
+    {
+        Physics2D.IgnoreCollision(col, plataforma, true);
+        yield return new WaitForSeconds(0.4f);
+        Physics2D.IgnoreCollision(col, plataforma, false);
     }
 }
