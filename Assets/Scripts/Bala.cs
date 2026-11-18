@@ -9,7 +9,7 @@ public class Bala : MonoBehaviour
     float empuje;
     GameObject duenio;
 
-    // Lo llama el arma justo despu�s de crear la bala
+    // Lo llama el arma justo después de crear la bala
     public void Iniciar(Vector2 dir, float velocidad, float fuerzaEmpuje, GameObject quienDispara)
     {
         direccion = dir;
@@ -25,20 +25,21 @@ public class Bala : MonoBehaviour
             transform.localScale = e;
         }
 
-        VidasJugador victima = otro.GetComponent<VidasJugador>();
-        if (victima != null)
-            victima.ultimoAtacante = duenio.GetComponent<VidasJugador>();
-
         Destroy(gameObject, tiempoVida);
     }
 
     void OnTriggerEnter2D(Collider2D otro)
     {
-        if (otro.gameObject == duenio) return;   // no se empuja a s� mismo
+        if (otro.gameObject == duenio) return;   // no se empuja a sí mismo
 
         JugadorMovimiento j = otro.GetComponent<JugadorMovimiento>();
         if (j != null)
         {
+            // Guarda quién ha disparado para darle los puntos si la víctima cae
+            VidasJugador victima = otro.GetComponent<VidasJugador>();
+            if (victima != null && duenio != null)
+                victima.ultimoAtacante = duenio.GetComponent<VidasJugador>();
+
             j.RecibirEmpuje(direccion.x * empuje);
             Destroy(gameObject);
         }

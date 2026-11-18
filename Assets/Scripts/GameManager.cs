@@ -43,13 +43,13 @@ public class GameManager : MonoBehaviour
         if (victoria)
         {
             int total = ganador.puntos + ganador.vidas * 50;
-            textoFin.text = "¡VICTORIA!\n" + ganador.nombreMostrado + " gana\nPuntuación: " + total;
+            textoFin.text = "Â¡VICTORIA!\n" + ganador.nombreMostrado + " gana\nPuntuaciÃ³n: " + total;
         }
         else
         {
             VidasJugador humano = luchadores.FirstOrDefault(l => l.esHumano);
             int total = humano != null ? humano.puntos : 0;
-            textoFin.text = "DERROTA\nPuntuación: " + total;
+            textoFin.text = "DERROTA\nPuntuaciÃ³n: " + total;
         }
 
         botonSiguiente.SetActive(victoria && siguienteNivel != "");

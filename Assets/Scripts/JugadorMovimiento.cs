@@ -10,6 +10,8 @@ public class JugadorMovimiento : MonoBehaviour
     public KeyCode tclSalto = KeyCode.W;
     public KeyCode tclBajar = KeyCode.S;
 
+    public bool controladoPorIA = false;
+
     public float velocidad = 7f;
     public float fuerzaSalto = 12f;
     public int saltosMaximos = 2;
@@ -28,6 +30,12 @@ public class JugadorMovimiento : MonoBehaviour
     bool quiereSaltar;
     bool mirandoDerecha = true;
 
+    float entradaIA;
+    bool saltoIA;
+    bool bajarIA;
+
+    public bool EnSuelo => enSuelo;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -37,12 +45,23 @@ public class JugadorMovimiento : MonoBehaviour
 
     void Update()
     {
-        direccion = 0f;
-        if (Input.GetKey(tclIzq)) direccion -= 1f;
-        if (Input.GetKey(tclDer)) direccion += 1f;
-        if (Input.GetKeyDown(tclSalto)) quiereSaltar = true;
-        if (Input.GetKeyDown(tclBajar) && enSuelo)
-            IntentarBajar();
+        if (controladoPorIA)
+        {
+            direccion = entradaIA;
+            if (saltoIA) quiereSaltar = true;
+            if (bajarIA && enSuelo) IntentarBajar();
+            saltoIA = false;
+            bajarIA = false;
+        }
+        else
+        {
+            direccion = 0f;
+            if (Input.GetKey(tclIzq)) direccion -= 1f;
+            if (Input.GetKey(tclDer)) direccion += 1f;
+            if (Input.GetKeyDown(tclSalto)) quiereSaltar = true;
+            if (Input.GetKeyDown(tclBajar) && enSuelo)
+                IntentarBajar();
+        }
 
         if ((direccion > 0 && !mirandoDerecha) || (direccion < 0 && mirandoDerecha))
             Girar();
@@ -74,6 +93,19 @@ public class JugadorMovimiento : MonoBehaviour
             saltosRestantes--;
         }
         quiereSaltar = false;
+    }
+
+    public void EntradaIA(float dir, bool saltar, bool bajar)
+    {
+        entradaIA = Mathf.Clamp(dir, -1f, 1f);
+        if (saltar) saltoIA = true;
+        if (bajar) bajarIA = true;
+    }
+
+    public void MirarHacia(float dirX)
+    {
+        if ((dirX > 0 && !mirandoDerecha) || (dirX < 0 && mirandoDerecha))
+                Girar();
     }
 
     void Girar()

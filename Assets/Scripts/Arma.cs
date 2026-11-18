@@ -6,10 +6,13 @@ public class Arma : MonoBehaviour
     public GameObject prefabBala;
     public Transform puntoDisparo;
 
+    public bool controladoPorIA = false;
+    public bool disparoIA;
+
     public float cadencia = 0.25f;     // segundos entre disparos
     public float velocidadBala = 20f;
     public float empuje = 8f;          // empuje al rival
-    public float retroceso = 2f;       // empuje hacia atrás al que dispara
+    public float retroceso = 2f;       // empuje hacia atrÃ¡s al que dispara
 
     JugadorMovimiento jugador;
     float siguienteDisparo;
@@ -21,7 +24,9 @@ public class Arma : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(tclDisparo) && Time.time >= siguienteDisparo)
+        bool quiereDisparar = controladoPorIA ? disparoIA : Input.GetKey(tclDisparo);
+
+        if (quiereDisparar && Time.time >= siguienteDisparo)
         {
             Disparar();
             siguienteDisparo = Time.time + cadencia;
