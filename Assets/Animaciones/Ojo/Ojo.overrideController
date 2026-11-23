@@ -7,5 +7,13 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Ojo
-  m_Controller: {fileID: 0}
-  m_Clips: []
+  m_Controller: {fileID: 9100000, guid: e58b569a3958cb140978b7d558a4dd98, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: a8f64bc20aa2fd24cae24f73fdec3b60, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: aa0ee42628724364eb9ac4088827d33b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 721619a8b2b9b214fa68776f5d28753e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b13836bf4f32d4e4ab638439186d039f, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 0f8741863f7037f4fac32fdd8fe1ab22, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1f301b922cb28e548a124ad7a8ebdc9a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: aeba8085fbd74e44ca77563e777bde19, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c0ce5b326155e49448c5bfa834b51490, type: 2}

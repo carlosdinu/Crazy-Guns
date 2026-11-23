@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 
 public class VidasJugador : MonoBehaviour
 {
@@ -7,18 +6,22 @@ public class VidasJugador : MonoBehaviour
     public bool esHumano = true;
     public int vidas = 3;
     public Transform puntoReaparicion;
-    public TextMeshProUGUI textoHUD;
+    public HUDLuchador hud;
 
     [HideInInspector] public int puntos;
     [HideInInspector] public VidasJugador ultimoAtacante;
 
     Rigidbody2D rb;
     JugadorMovimiento movimiento;
+    Sprite retrato;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         movimiento = GetComponent<JugadorMovimiento>();
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr != null) retrato = sr.sprite;   // primer frame = retrato del HUD
     }
 
     void Start()
@@ -28,6 +31,7 @@ public class VidasJugador : MonoBehaviour
 
     public void Morir()
     {
+        // El último que te disparó se lleva los puntos
         if (ultimoAtacante != null && ultimoAtacante != this)
             ultimoAtacante.SumarPuntos(100);
         ultimoAtacante = null;
@@ -58,12 +62,13 @@ public class VidasJugador : MonoBehaviour
     void Eliminar()
     {
         gameObject.SetActive(false);
-        GameManager.instancia.ComprobarFinPartida();
+        if (GameManager.instancia != null)
+            GameManager.instancia.ComprobarFinPartida();
     }
 
     void ActualizarHUD()
     {
-        if (textoHUD != null)
-            textoHUD.text = nombreMostrado + "\nVidas: " + vidas + "\nPuntos: " + puntos;
+        if (hud != null)
+            hud.Actualizar(nombreMostrado, vidas, puntos, retrato);
     }
 }
