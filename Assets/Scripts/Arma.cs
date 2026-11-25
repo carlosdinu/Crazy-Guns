@@ -33,6 +33,7 @@ public class Arma : MonoBehaviour
     SpriteRenderer sr;
     Vector3 puntoInicial;
     float siguienteDisparo;
+    HUDLuchador hud;
 
     public string NombreArma => actual.nombre;
 
@@ -41,6 +42,8 @@ public class Arma : MonoBehaviour
         jugador = GetComponentInParent<JugadorMovimiento>();
         sr = GetComponent<SpriteRenderer>();
         puntoInicial = puntoDisparo.localPosition;
+        VidasJugador vidas = GetComponentInParent<VidasJugador>();
+        if (vidas != null) hud = vidas.hud;
         Equipar(armaInicial);
     }
 
@@ -53,6 +56,8 @@ public class Arma : MonoBehaviour
             sr.sprite = datos.sprite;
 
         puntoDisparo.localPosition = datos.canon != Vector2.zero ? (Vector3)datos.canon : puntoInicial;
+
+        NotificarHUD();
     }
 
     void Update()
@@ -81,12 +86,51 @@ public class Arma : MonoBehaviour
 
         jugador.RecibirEmpuje(-dir * actual.retroceso);
 
-        // Si el arma tiene munición limitada, al acabarse vuelve a la inicial
+        // Si el arma tiene munición limitada, al acabarse se suelta y vuelve la inicial
         if (actual.municion > 0)
         {
             municionRestante--;
             if (municionRestante <= 0)
+            {
+                SoltarArma();
                 Equipar(armaInicial);
+            }
+            else
+            {
+                NotificarHUD();
+            }
         }
+    }
+
+    void NotificarHUD()
+    {
+        if (hud != null)
+            hud.ActualizarArma(actual.sprite, actual.municion > 0 ? municionRestante : -1);
+    }
+
+    /// Crea una copia del arma que sale despedida girando y desaparece.
+    void SoltarArma()
+    {
+        if (sr == null || sr.sprite == null) return;
+
+        float dir = Mathf.Sign(jugador.transform.localScale.x);
+
+        GameObject suelta = new GameObject("ArmaSoltada");
+        suelta.transform.position = transform.position;
+        suelta.transform.rotation = transform.rotation;
+        suelta.transform.localScale = transform.lossyScale;   // mantiene hacia dónde miraba
+
+        SpriteRenderer copia = suelta.AddComponent<SpriteRenderer>();
+        copia.sprite = sr.sprite;
+        copia.sortingLayerID = sr.sortingLayerID;
+        copia.sortingOrder = sr.sortingOrder;
+
+        // Sin collider: atraviesa el escenario mientras cae
+        Rigidbody2D rb = suelta.AddComponent<Rigidbody2D>();
+        rb.gravityScale = 3f;
+        rb.velocity = new Vector2(-dir * 3f, 8f);   // hacia atrás y hacia arriba
+        rb.angularVelocity = dir * 720f;            // dos vueltas por segundo
+
+        suelta.AddComponent<Desvanecer>();
     }
 }
