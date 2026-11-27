@@ -2387,7 +2387,7 @@ GameObject:
   - component: {fileID: 998308013}
   - component: {fileID: 998308012}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: TextReiniciar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2557,6 +2557,8 @@ MonoBehaviour:
   zoomCelebracion: 3
   camaraLenta: 0.3
   duracionCelebracion: 2.5
+  textoReiniciar: {fileID: 998308012}
+  textoCondicion: {fileID: 0}
 --- !u!4 &1049784131
 Transform:
   m_ObjectHideFlags: 0
@@ -5635,8 +5637,8 @@ MonoBehaviour:
   distanciaIdeal: 9
   rangoDisparo: 12
   toleranciaAltura: 1
-  tiempoReaccion: 0.2
-  agresividad: 1
+  tiempoReaccion: 0.3
+  agresividad: 0.8
   capaSuelo:
     serializedVersion: 2
     m_Bits: 64
