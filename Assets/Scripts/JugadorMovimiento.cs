@@ -145,10 +145,19 @@ public class JugadorMovimiento : MonoBehaviour
             StartCoroutine(AtravesarPlataforma(debajo));
     }
 
+    private bool bajando;
+
     IEnumerator AtravesarPlataforma(Collider2D plataforma)
     {
+        bajando = true;
         Physics2D.IgnoreCollision(col, plataforma, true);
-        yield return new WaitForSeconds(0.4f);
+
+        yield return new WaitForSeconds(0.15f); // margen para que empiece a caer
+
+        while (col.Distance(plataforma).isOverlapped) // sigue dentro -> seguir esperando
+            yield return new WaitForFixedUpdate();
+
         Physics2D.IgnoreCollision(col, plataforma, false);
+        bajando = false;
     }
 }

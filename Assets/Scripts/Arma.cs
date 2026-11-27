@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Indica que la clase se puede serializar, es decir, se pueden editar desde el editor
 [System.Serializable]
 public class DatosArma
 {
@@ -15,12 +16,18 @@ public class DatosArma
     public Vector2 canon;                // punta del cañón (0,0 = usar PuntoDisparo)
 }
 
+/*
+ *  Clase Arma, contiene la logica del arma, desde la tecla con la cual el jugador dispara hasta el control de la IA sobre
+ *  el arma.
+ * 
+ */
 public class Arma : MonoBehaviour
 {
     public KeyCode tclDisparo = KeyCode.Space;
     public GameObject prefabBala;
     public Transform puntoDisparo;
 
+    // ToolTip aparece cuando dejas el mouse en el editor sobre el boolean controladoPorIa
     [Tooltip("Si está marcado, dispara cuando BotIA lo ordena")]
     public bool controladoPorIA = false;
     [HideInInspector] public bool disparoIA;
