@@ -39,6 +39,9 @@ public class GameManager : MonoBehaviour
     int vidasRestantes;
     int total;
 
+    [Header("Nivel")]
+    public TMP_Text textoNivel;
+
 
     void Awake()
     {
@@ -53,6 +56,7 @@ public class GameManager : MonoBehaviour
         camara = Camera.main.GetComponent<CamaraDinamica>();
         panelFin.SetActive(false);
         if (textoGrande != null) textoGrande.gameObject.SetActive(false);
+        if (textoNivel != null) textoNivel.text = ComprobarNivelActual();
     }
 
     public void ComprobarFinPartida()
@@ -171,5 +175,13 @@ public class GameManager : MonoBehaviour
                         "Vidas restantes: " + vidasRestantes + " × 50</size>\n" +
                         "<color=#90CAF9>Puntuación: " + total + "</color>";
         }
+    }
+
+    public string ComprobarNivelActual()
+    {
+        string nivel;
+        nivel = SceneManager.GetActiveScene().name.ToString();
+
+        return nivel;
     }
 }
