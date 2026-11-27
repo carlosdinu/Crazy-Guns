@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject panelFin;
     public TMP_Text textoFin;
     public GameObject botonSiguiente;
-    public string siguienteNivel = "";   // nombre de la escena del nivel 2
+    public string siguienteNivel = "";   // nombre de la escena del siguiente nivel
 
     [Header("Celebración")]
     public TMP_Text textoGrande;                 // "¡VICTORIA!" / "DERROTA"
@@ -23,6 +24,12 @@ public class GameManager : MonoBehaviour
     VidasJugador[] luchadores;
     CamaraDinamica camara;
     bool terminada;
+
+    VidasJugador[] vivos;
+    VidasJugador ganador;
+    bool victoria;
+
+    public TMP_Text textoReiniciar;
 
     void Awake()
     {
@@ -43,14 +50,14 @@ public class GameManager : MonoBehaviour
     {
         if (terminada) return;
 
-        VidasJugador[] vivos = luchadores.Where(l => l.gameObject.activeSelf).ToArray();
+        vivos = luchadores.Where(l => l.gameObject.activeSelf).ToArray();
         bool quedaHumano = vivos.Any(l => l.esHumano);
 
         if (vivos.Length > 1 && quedaHumano) return;   // la partida sigue
 
         terminada = true;
-        VidasJugador ganador = vivos.Length == 1 ? vivos[0] : null;
-        bool victoria = ganador != null && ganador.esHumano;
+        ganador = vivos.Length == 1 ? vivos[0] : null;
+        victoria = ganador != null && ganador.esHumano;
 
         // Puntuación: 100 por eliminación + 50 por vida restante (solo si ganas)
         VidasJugador jugador = luchadores.FirstOrDefault(l => l.esHumano);
@@ -94,6 +101,9 @@ public class GameManager : MonoBehaviour
         if (textoGrande != null) textoGrande.gameObject.SetActive(false);
         botonSiguiente.SetActive(victoria && siguienteNivel != "");
         panelFin.SetActive(true);
+
+        if (SceneManager.GetActiveScene().name.Equals("Nivel5") && victoria) textoReiniciar.text = "Volver al nivel 1";
+
         Time.timeScale = 0f;   // congela el juego
     }
 
@@ -122,7 +132,15 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        if (SceneManager.GetActiveScene().name.Equals("Nivel5") && victoria)
+        {
+            SceneManager.LoadScene("Nivel1");
+        } else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     public void SiguienteNivel()
