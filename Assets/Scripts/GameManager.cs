@@ -179,9 +179,7 @@ public class GameManager : MonoBehaviour
 
     public string ComprobarNivelActual()
     {
-        string nivel;
-        nivel = SceneManager.GetActiveScene().name.ToString();
-
-        return nivel;
+        string nivel = SceneManager.GetActiveScene().name;
+        return nivel.Replace("Nivel", "Nivel ");
     }
 }
