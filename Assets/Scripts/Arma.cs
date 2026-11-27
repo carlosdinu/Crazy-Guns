@@ -69,6 +69,8 @@ public class Arma : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return;   // juego congelado: no se dispara
+
         bool quiereDisparar = controladoPorIA ? disparoIA : Input.GetKey(tclDisparo);
 
         if (quiereDisparar && Time.time >= siguienteDisparo)

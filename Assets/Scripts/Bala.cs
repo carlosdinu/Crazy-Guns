@@ -38,7 +38,10 @@ public class Bala : MonoBehaviour
             // Guarda quién ha disparado para darle los puntos si la víctima cae
             VidasJugador victima = otro.GetComponent<VidasJugador>();
             if (victima != null && duenio != null)
+            {
                 victima.ultimoAtacante = duenio.GetComponent<VidasJugador>();
+                victima.tiempoUltimoGolpe = Time.time;
+            }
 
             j.RecibirEmpuje(direccion.x * empuje);
             Destroy(gameObject);

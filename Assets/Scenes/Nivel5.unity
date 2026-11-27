@@ -942,13 +942,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa525e8d5eaca54ebc497544944ff12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nombreMostrado: Jugador 1
+  nombreMostrado: Froggy
   esHumano: 1
   vidas: 3
   puntoReaparicion: {fileID: 801318163}
   hud: {fileID: 300195911}
   puntos: 0
   ultimoAtacante: {fileID: 0}
+  tiempoUltimoGolpe: 0
+  ventanaEliminacion: 3
 --- !u!1 &443629945
 GameObject:
   m_ObjectHideFlags: 0
@@ -5663,13 +5665,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa525e8d5eaca54ebc497544944ff12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nombreMostrado: Bruno
+  nombreMostrado: Ojo
   esHumano: 0
   vidas: 3
   puntoReaparicion: {fileID: 1403855163}
   hud: {fileID: 1541505512}
   puntos: 0
   ultimoAtacante: {fileID: 0}
+  tiempoUltimoGolpe: 0
+  ventanaEliminacion: 3
 --- !u!114 &1990461785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5837,10 +5841,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c0027e7d61fae40aa450fe8342f707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanciaIdeal: 9
+  distanciaIdeal: 10
   rangoDisparo: 12
   toleranciaAltura: 1
-  tiempoReaccion: 0.4
+  tiempoReaccion: 0.15
   agresividad: 0.8
   capaSuelo:
     serializedVersion: 2

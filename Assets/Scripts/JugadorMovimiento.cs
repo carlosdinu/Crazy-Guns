@@ -29,6 +29,7 @@ public class JugadorMovimiento : MonoBehaviour
     bool enSuelo;
     bool quiereSaltar;
     bool mirandoDerecha = true;
+    bool bajando;
 
     float entradaIA;
     bool saltoIA;
@@ -45,6 +46,9 @@ public class JugadorMovimiento : MonoBehaviour
 
     void Update()
     {
+        // Con el juego congelado (panel final) no se lee ningún control
+        if (Time.timeScale == 0f) return;
+
         if (controladoPorIA)
         {
             direccion = entradaIA;
@@ -79,7 +83,8 @@ public class JugadorMovimiento : MonoBehaviour
         Bounds b = col.bounds;
         Vector2 pies = new Vector2(b.center.x, b.min.y);
         Vector2 tamano = new Vector2(b.size.x * 0.9f, 0.1f);
-        enSuelo = Physics2D.OverlapBox(pies, tamano, 0f, capaSuelo);
+        // Mientras atraviesa una plataforma hacia abajo no cuenta como suelo
+        enSuelo = !bajando && Physics2D.OverlapBox(pies, tamano, 0f, capaSuelo);
 
         if (enSuelo && rb.velocity.y <= 0.01f)
             saltosRestantes = saltosMaximos;
@@ -105,7 +110,7 @@ public class JugadorMovimiento : MonoBehaviour
     public void MirarHacia(float dirX)
     {
         if ((dirX > 0 && !mirandoDerecha) || (dirX < 0 && mirandoDerecha))
-                Girar();
+            Girar();
     }
 
     void Girar()
@@ -137,15 +142,15 @@ public class JugadorMovimiento : MonoBehaviour
 
     void IntentarBajar()
     {
+        if (bajando) return;   // evita lanzar varias corrutinas a la vez
+
         Bounds b = col.bounds;
         Collider2D debajo = Physics2D.OverlapBox(
-            new Vector2(b.center.x, b.min.y), new Vector2(b.size.x * 0.9f, 0.1f), 0f, capaSuelo);
+            new Vector2(b.center.x, b.min.y - 0.05f), new Vector2(b.size.x * 0.9f, 0.1f), 0f, capaSuelo);
 
         if (debajo != null && debajo.GetComponent<PlatformEffector2D>() != null)
             StartCoroutine(AtravesarPlataforma(debajo));
     }
-
-    private bool bajando;
 
     IEnumerator AtravesarPlataforma(Collider2D plataforma)
     {

@@ -10,6 +10,10 @@ public class VidasJugador : MonoBehaviour
 
     [HideInInspector] public int puntos;
     [HideInInspector] public VidasJugador ultimoAtacante;
+    [HideInInspector] public float tiempoUltimoGolpe;
+
+    // Segundos que dura el "último golpe": si cae después, nadie se lleva los puntos
+    public float ventanaEliminacion = 3f;
 
     Rigidbody2D rb;
     JugadorMovimiento movimiento;
@@ -31,8 +35,9 @@ public class VidasJugador : MonoBehaviour
 
     public void Morir()
     {
-        // El último que te disparó se lleva los puntos
-        if (ultimoAtacante != null && ultimoAtacante != this)
+        // El último que te disparó se lleva los puntos, si fue hace poco
+        bool golpeReciente = Time.time - tiempoUltimoGolpe <= ventanaEliminacion;
+        if (ultimoAtacante != null && ultimoAtacante != this && golpeReciente)
             ultimoAtacante.SumarPuntos(100);
         ultimoAtacante = null;
 

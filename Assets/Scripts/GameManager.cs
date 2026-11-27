@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text textoReiniciar;
     public TMP_Text textoCondicion;
 
-    [Header("Puntuacion")]
+    // Puntuación
     string titulo;
     int eliminaciones;
     int vidasRestantes;
@@ -138,7 +138,8 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name.Equals("Nivel5") && victoria)
         {
             SceneManager.LoadScene("Nivel1");
-        } else
+        }
+        else
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -158,13 +159,14 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name.Equals("Nivel5") && victoria)
         {
             textoReiniciar.text = "Volver al nivel 1";
-            titulo = victoria ? "<size=150%><color=#FFD54F>¡Juego Completado!</color></size>" : "<size=150%><color=#FFD54F>¡DERROTA!</color></size>";
+            titulo = "<size=150%><color=#FFD54F>¡Juego Completado!</color></size>";
 
             textoFin.text = titulo + "\n" +
                         "<size=70%>Eliminaciones: " + eliminaciones + " × 100\n" +
                         "Vidas restantes: " + vidasRestantes + " × 50</size>\n" +
                         "<color=#90CAF9>Puntuación: " + total + "</color>";
-        } else
+        }
+        else
         {
             titulo = victoria
             ? "<size=150%><color=#FFD54F>¡VICTORIA!</color></size>"
